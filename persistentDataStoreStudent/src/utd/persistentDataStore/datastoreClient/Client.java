@@ -19,6 +19,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import utd.persistentDataStore.datastoreServer.DatastoreServer;
 
@@ -34,26 +35,49 @@ public class Client
 			
 			
 			/* Write Function */
-			String msg = "Projects\n0032";
+			String msg = "Projects.txt\n0032";
 			byte[] writeData = "There was two project Verions???".getBytes();
 			System.out.println("Sending Request: Write file " + msg);
 			client.write(msg, writeData);
 			
 			System.out.println("Received Response <" + "This is a write dummy" + ">");
 			
+			/* Write Function */
+			msg = "Professors.txt\n0032";
+			writeData = "There was two project Verions???".getBytes();
+			System.out.println("Sending Request: Write file " + msg);
+			client.write(msg, writeData);
+			
+			System.out.println("Received Response <" + "This is a write dummy" + ">");
+			
+			/* Write Function */
+			msg = "Students.txt\n0032";
+			writeData = "There was two project Verions???".getBytes();
+			System.out.println("Sending Request: Write file " + msg);
+			client.write(msg, writeData);
+			
+			System.out.println("Received Response <" + "This is a write dummy" + ">");
+			
 			/* Read Function */
-			String nameR = "Projects";
+			String nameR = "Projects.txt";
 			System.out.println("Sending Request: Read File " + nameR);
 			byte[] ReadData = client.read(nameR);
 			String parseReadData = new String(ReadData, StandardCharsets.UTF_8);
 			System.out.println("Received Response <" + parseReadData + ">");
 			
 			/* Delete Function */
-			String nameD = "Projects";
+			String nameD = "Projects.txt";
 			System.out.println("Sending Request: Delete File " + nameD);
 			client.delete(nameD);
 			System.out.println("Received Response <" + "This is a delete dummy" + ">");
 			client.delete(nameD);
+			
+			/* Directory Function */
+			List<String> Directory = client.directory();
+			for (int x = 0; x < Directory.size(); x++) {
+				System.out.println(Directory.get(x));
+			}
+			
 		}
 		catch(Exception ex) {
 			System.out.println("Exception Thrown " + ex.getMessage());
