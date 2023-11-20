@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import utd.persistentDataStore.datastoreServer.commands.ServerCommand;
+import utd.persistentDataStore.utils.FileUtil;
+import utd.persistentDataStore.utils.ServerException;
 import utd.persistentDataStore.utils.StreamUtil;
 
 //code is not done
@@ -14,7 +16,7 @@ import utd.persistentDataStore.utils.StreamUtil;
 public class ReadHandler extends ServerCommand{
 
 	@Override
-    public void run() throws IOException {
+    public void run() throws IOException, ServerException {
 		//Read file on the server
 		String inMessage = StreamUtil.readLine(inputStream);
 		if (inMessage.length() == 0) {
@@ -27,13 +29,7 @@ public class ReadHandler extends ServerCommand{
 			sendOK();
 			
 			System.out.println("inMessage: " + inMessage);
-			
-			File file = new File(inMessage);
-	        try(FileInputStream fis = new FileInputStream(file);
-	                BufferedInputStream bis = new BufferedInputStream(fis)) {
-
-	           byte[] fileContent = new byte[(int) file.length()];
-	           bis.read(fileContent);
+			byte[] fileContent = FileUtil.readData(inMessage);
 	           String Fstring = new String(fileContent, StandardCharsets.UTF_8);
 	           // Print the string array
 	           System.out.println("File data: " + Fstring);
@@ -42,14 +38,17 @@ public class ReadHandler extends ServerCommand{
 				StreamUtil.writeLine(outMessage, outputStream);
 				StreamUtil.writeData(fileContent, outputStream);
 				System.out.println("Finished writing message");
-	        } finally{
-	        	
 	        }
 			System.out.println("testing the end of the read file");
 		}
-		
-		
-	}
 
 }
+
+
+//File file = new File(inMessage);
+//try(FileInputStream fis = new FileInputStream(file);
+//        BufferedInputStream bis = new BufferedInputStream(fis)) {
+//
+//   byte[] fileContent = new byte[(int) file.length()];
+//   bis.read(fileContent);
 

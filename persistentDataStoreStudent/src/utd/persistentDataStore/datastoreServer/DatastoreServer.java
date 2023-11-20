@@ -83,6 +83,10 @@ public class DatastoreServer
 			ServerCommand handler = new DeleteHandler();
 			return handler;
 		}
+		else if ("directory".equalsIgnoreCase(commandString)) {
+			ServerCommand handler = new DirectoryHandler();
+			return handler;
+		}
 //		else if ("reverse".equalsIgnoreCase(commandString)) {
 //			ServerCommand handler = new ReverseHandler();
 //			return handler;

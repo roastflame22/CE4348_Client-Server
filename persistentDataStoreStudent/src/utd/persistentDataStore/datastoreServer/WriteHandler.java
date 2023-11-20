@@ -3,6 +3,7 @@ package utd.persistentDataStore.datastoreServer;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import utd.persistentDataStore.utils.FileUtil;
 import utd.persistentDataStore.utils.StreamUtil;
 import utd.persistentDataStore.datastoreServer.commands.ServerCommand;
 import java.io.File;
@@ -45,21 +46,22 @@ public class WriteHandler extends ServerCommand{
 			System.out.println("Write response message");
 			sendOK();
 			System.out.println("Tesk ok");
-			File Fstream = new File(Name);
-            if (Fstream.createNewFile()) {
-                System.out.println("File created: " + Fstream.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
-            String output = new String(inMessage2, StandardCharsets.UTF_8);
-            // Write content to the file
-            FileWriter writer = new FileWriter(Fstream);
-            writer.write(output);
-            writer.close();
-            Scanner scanner = new Scanner(Fstream);
-            String fileTest = scanner.nextLine();
-            System.out.println("First Line" + fileTest);
-            scanner.close();
+			FileUtil.writeData(Name, inMessage2);
+//			File Fstream = new File(Name);
+//            if (Fstream.createNewFile()) {
+//                System.out.println("File created: " + Fstream.getName());
+//            } else {
+//                System.out.println("File already exists.");
+//            }
+//            String output = new String(inMessage2, StandardCharsets.UTF_8);
+//            // Write content to the file
+//            FileWriter writer = new FileWriter(Fstream);
+//            writer.write(output);
+//            writer.close();
+//            Scanner scanner = new Scanner(Fstream);
+//            String fileTest = scanner.nextLine();
+//            System.out.println("First Line" + fileTest);
+//            scanner.close();
 
         }
 			StreamUtil.writeData(inMessage2, outputStream);

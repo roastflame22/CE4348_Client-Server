@@ -18,6 +18,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.ArrayList;
 import java.util.List;
 import utd.persistentDataStore.utils.StreamUtil;
 
@@ -159,8 +160,48 @@ public class DatastoreClientImpl implements DatastoreClient
 	@Override
     public List<String> directory() throws ClientException, ConnectionException
 	{
-		// Replace with implementation
-		throw new RuntimeException("Executing Directory Operation");
+		List<String> output = new ArrayList();
+		try {
+			System.out.println("Opening Socket");
+	        Socket socket = new Socket();
+	        SocketAddress saddr = new InetSocketAddress(address, port);
+	        socket.connect(saddr);
+	        InputStream inputStream = socket.getInputStream();
+	        OutputStream outputStream = socket.getOutputStream();
+	        
+	        System.out.println("Writing Message");
+            StreamUtil.writeLine("directory\n", outputStream);
+	        
+	        System.out.println("Reading Response");
+            String response = StreamUtil.readLine(inputStream);
+	        if (!"ok".equalsIgnoreCase(response.trim()))
+            {
+                socket.close();
+                throw new ClientException("Error Response from Server: " + response);
+            }
+	        for (int idx = 0; idx < 1000; idx++)
+	        {
+	        	String internal = StreamUtil.readLine(inputStream);
+	        	if(internal.length() < 1)
+	        	{
+	        		System.out.println("you did it my boy");
+	        		idx = 1010;
+	        		socket.close();
+	        		return output;
+	        	}
+	        	else {
+	        		System.out.println("This the internal value " + idx + ": " + internal);
+	        		output.add(internal);
+	        	}
+	        }
+	        socket.close();
+		}
+		catch (IOException ex)
+		{
+			throw new ClientException(ex.getMessage(), ex);
+		}
+		
+		return output;
 	}
 
 }
